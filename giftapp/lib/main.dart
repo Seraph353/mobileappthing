@@ -275,6 +275,10 @@ class _CarsPageState extends State<CarsPage> {
   @override
 
   Widget build(BuildContext context) {
+     Size screenSize = MediaQuery.of(context).size;
+  double imageWidthPercentage = 0.9; // Adjust this value to set the percentage width of the image
+  double imageHeightPercentage = 0.3;
+
     return Scaffold(
       
       appBar: AppBar(
@@ -290,6 +294,7 @@ class _CarsPageState extends State<CarsPage> {
         centerTitle: true, // Center the title horizontally
         backgroundColor: const Color.fromARGB(255, 0, 146, 204), // Change the color of the app bar
       ),
+
       backgroundColor: const Color.fromARGB(255, 170, 170, 170),
       body: ListView.builder(
 
@@ -303,8 +308,9 @@ class _CarsPageState extends State<CarsPage> {
           ),
             leading: Image.asset(
             'assets/${car.image}',
-            width: 100,
-            height: 200.0,
+            width: screenSize.width * imageWidthPercentage,
+            height: screenSize.height * imageHeightPercentage,
+             // Align image to the left
             
             alignment: Alignment.centerLeft, // Align image to the left
           ),
