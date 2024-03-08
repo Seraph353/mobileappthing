@@ -1,0 +1,28 @@
+[
+    {"name":"Shaniqua",
+    "status":"Unfinished",
+    "image": "shaniqua.jpg"
+},
+
+{"name":"Tara",
+"status":"Unfinished",
+"image": "tara.png"
+},
+
+{"name":"Thomas",
+    "status":"Finished",
+    "image": "thomas.png"
+},
+
+{"name":"Ben",
+    "status":"Unfinished",
+    "image": "ben.png"
+},
+
+{"name":"Jerry",
+    "status":"Finished",
+    "image": "jerry.png"
+}
+
+  ]
+  
