@@ -1,9 +1,18 @@
+// ignore_for_file: library_private_types_in_public_api, duplicate_ignore, unused_import
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giftapp/LiveForms.dart';
-import 'package:http/http.dart' as http;
+import 'package:camera/camera.dart';
+import 'package:giftapp/camera_utils.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+//import 'package:http/http.dart' as http;
+//import 'package:giftapp/share.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -167,7 +176,11 @@ class HomePage extends StatelessWidget {
 ),
             
             ElevatedButton(
-  onPressed: () {
+  onPressed: () { Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CameraScreen()),
+                  );
+
     // Handle home button tap
   },
   style: ElevatedButton.styleFrom(
@@ -181,7 +194,7 @@ class HomePage extends StatelessWidget {
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Icon(
-        Icons.local_phone, // Replace Icons.home with your desired icon
+        Icons.camera_enhance, // Replace Icons.home with your desired icon
         size: 19, 
         color:  Color.fromARGB(255, 255, 255, 255),// Adjust the size of the icon as needed
       ),
@@ -272,67 +285,171 @@ class _CarsPageState extends State<CarsPage> {
     });
   }
 
-  @override
+ @override
+Widget build(BuildContext context) {
+  Size screenSize = MediaQuery.of(context).size;
+  double imageWidthPercentage = 0.2; // Adjust this value to set the percentage width of the image
+  double imageHeightPercentage = 0.2;
 
-  Widget build(BuildContext context) {
-     Size screenSize = MediaQuery.of(context).size;
-  double imageWidthPercentage = 0.9; // Adjust this value to set the percentage width of the image
-  double imageHeightPercentage = 0.3;
-
-    return Scaffold(
-      
-      appBar: AppBar(
-        title: const Text(
-          'Gift Forms',
-          style: TextStyle(
-            fontFamily: 'PermanentMarker',
-            fontSize: 34.0,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 0, 0, 0)
-          ),
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text(
+        'Gift Forms',
+        style: TextStyle(
+          fontFamily: 'PermanentMarker',
+          fontSize: 34.0,
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(255, 0, 0, 0),
         ),
-        centerTitle: true, // Center the title horizontally
-        backgroundColor: const Color.fromARGB(255, 0, 146, 204), // Change the color of the app bar
       ),
-
-      backgroundColor: const Color.fromARGB(255, 170, 170, 170),
-      body: ListView.builder(
-
-        itemCount: cars.length,
-        itemBuilder: (context, index) {
-          final car = cars[index];
-          return ListTile(
-             title: Text(
-            '${car.name} ${car.status}',
-            textAlign: TextAlign.right, // Align text to the right
-          ),
-            leading: Image.asset(
-            'assets/${car.image}',
-            width: screenSize.width * imageWidthPercentage,
-            height: screenSize.height * imageHeightPercentage,
-             // Align image to the left
-            
-            alignment: Alignment.centerLeft, // Align image to the left
-          ),
-            
-          
-
-
-
-          
-           
-
-
-            
-            // Add more widgets or customize as needed
-          );
-        },
-      ),
-    );
-  }
+      centerTitle: true, // Center the title horizontally
+      backgroundColor: const Color.fromARGB(255, 0, 146, 204), // Change the color of the app bar
+    ),
+    backgroundColor: const Color.fromARGB(255, 170, 170, 170),
+    body: ListView.builder(
+      itemCount: cars.length,
+      itemBuilder: (context, index) {
+        final car = cars[index];
+        return Column(
+          children: [
+            ListTile(
+              title: Text(
+                '${car.name} ${car.status}',
+                textAlign: TextAlign.right, // Align text to the right
+              ),
+              leading: SizedBox(
+                width: screenSize.width * imageWidthPercentage,
+                height: screenSize.height * imageHeightPercentage,
+                child: Image.asset(
+                  'assets/${car.image}',
+                  fit: BoxFit.cover, // Ensure the image covers the entire box
+                  alignment: Alignment.centerLeft, // Align image to the left
+                ),
+              ),
+            ),
+            const SizedBox(height: 10), // Adjust the height according to your spacing preference
+          ],
+        );
+      },
+    ),
+  );
+}
 }
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+class CameraScreen extends StatefulWidget {
+  const CameraScreen({Key? key}) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CameraScreenState createState() => _CameraScreenState();
+}
+
+class _CameraScreenState extends State<CameraScreen> {
+  late CameraController _controller;
+  late Future<void> _initializeControllerFuture;
+  Future<void> _initializeCamera() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugin services are initialized
+
+  final cameras = await availableCameras();
+  if (cameras.isEmpty) {
+    // Handle the case where no cameras are available
+    print('No cameras found');
+    return;
+  }
+  final firstCamera = cameras.first;
+
+  _controller = CameraController(
+    firstCamera,
+    ResolutionPreset.medium,
+  );
+  _initializeControllerFuture = _controller.initialize();
+}
+
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(CameraUtils.cameras[1], ResolutionPreset.medium);
+    _initializeControllerFuture = _controller.initialize();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+Future<void> _takePicture() async {
+  try {
+    await _initializeControllerFuture;
+
+    final XFile file = await _controller.takePicture();
+
+    // Save the captured image to the gallery
+    await GallerySaver.saveImage(file.path);
+
+    // Show a Thank-You dialog after taking the picture
+    // ignore: use_build_context_synchronously
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thank You!'),
+          content: const Text('Thank you for taking the picture! It has been sent to us for a trade in value. Its Been saved in the gallery too for you to look back. We will be in touch soon'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  } catch (e) {
+    print("Error taking or saving picture: $e");
+  }
+}
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Show Us Your Car'),
+        backgroundColor: Colors.black,
+      ),backgroundColor: Colors.black,
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(_controller);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _takePicture,
+        child: const Icon(Icons.camera_alt),
+      ),
+    );
+  }
+}
