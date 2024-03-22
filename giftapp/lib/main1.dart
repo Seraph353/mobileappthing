@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, duplicate_ignore, unused_import, use_super_parameters, avoid_print, prefer_const_constructors
+
 
 import 'dart:convert';
 
@@ -15,9 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:giftapp/share.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await CameraUtils.initializeCameras();
+void main() {
   runApp(const MyApp());
 }
 
@@ -339,22 +337,9 @@ Widget build(BuildContext context) {
 }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// end fave page
+// camera_screen.dart
+//  _controller = CameraController(CameraUtils.cameras[0], ResolutionPreset.medium);
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -438,4 +423,9 @@ Future<void> _takePicture() async {
     );
   }
 }
+
+
+
+// **********************  The second page 
+
 
