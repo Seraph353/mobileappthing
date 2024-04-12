@@ -1,0 +1,43 @@
+[
+    {
+      "id": "002",
+      "brand": "Apple",
+      "model": "iPhone 12",
+      "image": "iphone12.jpg",
+      "price": "$799",
+      "description": "The iPhone 12 features a stunning new design, powerful A14 Bionic chip, and 5G capability."
+    },
+    {
+      "id": "003",
+      "brand": "Toyota",
+      "model": "Camry",
+      "image": "camry.jpg",
+      "price": "$24,970",
+      "description": "The Toyota Camry is a reliable and fuel-efficient sedan known for its comfortable ride and spacious interior."
+    },
+    {
+      "id": "004",
+      "brand": "Nike",
+      "model": "Air Force 1",
+      "image": "air_force_1.jpg",
+      "price": "$90",
+      "description": "The Nike Air Force 1 is a classic sneaker known for its timeless design and comfort."
+    },
+    {
+      "id": "005",
+      "brand": "Sony",
+      "model": "PlayStation 5",
+      "image": "ps5.jpg",
+      "price": "$499",
+      "description": "The PlayStation 5 is Sony's next-generation gaming console, offering stunning graphics and lightning-fast load times."
+    },
+    {
+      "id": "006",
+      "brand": "Amazon",
+      "model": "Kindle Paperwhite",
+      "image": "kindle_paperwhite.jpg",
+      "price": "$129.99",
+      "description": "The Kindle Paperwhite is a waterproof e-reader with a high-resolution display and built-in adjustable light."
+    }
+  ]
+  

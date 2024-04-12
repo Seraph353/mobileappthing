@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+//import 'package:flutter/services.dart';
 import 'package:giftapp/LiveForms.dart';
 import 'package:camera/camera.dart';
 import 'package:giftapp/camera_utils.dart';
@@ -128,12 +129,27 @@ class HomePage extends StatelessWidget {
     ElevatedButton(
   onPressed: () {
     Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 16), // Set the duration of the transition
+        pageBuilder: (_, __, ___) => const HomePage(), // Define the destination page
+        transitionsBuilder: (_, animation, __, child) {
+          // Define the transition animation
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0), // Slide from right
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          );
+          
+        },
+      ),
+    );
+  },
               
     // Handle home button tap
-  },
+
   style: ElevatedButton.styleFrom(
     backgroundColor: const Color.fromARGB(255, 0, 146, 204), // Button background color
     fixedSize: const Size(40, 40), // Button size
@@ -158,9 +174,25 @@ class HomePage extends StatelessWidget {
                 // Handle home button tap
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CarsPage()),
-                  );
-              },
+                    PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 16), // Set the duration of the transition
+        pageBuilder: (_, __, ___) => const CarsPage(), // Define the destination page
+        transitionsBuilder: (_, animation, __, child) {
+          // Define the transition animation
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0), // Slide from right
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          );
+          
+        },
+      ),
+      );
+      },
+
+              
 
   style: ElevatedButton.styleFrom(
     backgroundColor: const Color.fromARGB(255, 0, 146, 204), // Button background color
@@ -185,8 +217,22 @@ class HomePage extends StatelessWidget {
             ElevatedButton(
   onPressed: () { Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CameraScreen()),
-                  );
+                    PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 16), // Set the duration of the transition
+        pageBuilder: (_, __, ___) => const CameraScreen(), // Define the destination page
+        transitionsBuilder: (_, animation, __, child) {
+          // Define the transition animation
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0), // Slide from right
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          );
+          
+        },
+      ),
+      );
 
     // Handle home button tap
   },
@@ -208,29 +254,7 @@ class HomePage extends StatelessWidget {
     ],
   ),
 ),
-            
-            ElevatedButton(
-  onPressed: () {
-    // Handle home button tap
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color.fromARGB(255, 0, 146, 204), // Button background color
-    fixedSize: const Size(40, 40), // Button size
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(1000.0), // Circular button shape
-    ),
-  ),
-  child: const Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(
-        Icons.settings, // Replace Icons.home with your desired icon
-        size: 19, 
-        color:  Color.fromARGB(255, 255, 255, 255),// Adjust the size of the icon as needed
-      ),
-    ],
-  ),
-),
+  
           ],
         ),
       ),
@@ -284,16 +308,26 @@ class _CarsPageState extends State<CarsPage> {
     loadCars();
   }
 
-  Future<void> loadCars() async {
-    final String data = await rootBundle.loadString('assets/cars.json');
-    final List<dynamic> jsonList = json.decode(data);
+Future<void> loadCars() async {
+  try {
+    // Load the JSON file from the assets directory
+    String jsonString = await rootBundle.loadString('assets/gifts.json');
+   
+    // Parse the JSON string
+    final List<dynamic> jsonList = json.decode(jsonString);
+   
+    // Convert JSON data to a list of Car objects
     final List<Car> loadedCars = jsonList.map((json) => Car.fromJson(json)).toList();
-    final response = await http.get(Uri.parse('http://www.bloxlox.net/cars.json'));
-
+   
+    // Update the state with loaded data
     setState(() {
       cars = loadedCars;
     });
+  } catch (error) {
+    // Handle errors, e.g., show an error message or fallback to default data
+    //print('Error loading cars: $error');
   }
+}
 
  @override
 Widget build(BuildContext context) {
@@ -425,7 +459,7 @@ Future<void> _takePicture() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gift Findr'),
+        title: const Text('Gift Finder'),
         backgroundColor: const Color.fromARGB(255, 0, 146, 204),
       ),backgroundColor: Color.fromARGB(255, 0, 0, 0), 
       body: FutureBuilder<void>(
