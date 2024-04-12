@@ -310,26 +310,21 @@ class _CarsPageState extends State<CarsPage> {
     loadCars();
   }
 
-Future<void> loadCars() async {
-  try {
-    // Load the JSON file from the assets directory
-    String jsonString = await rootBundle.loadString('assets/gifts.json');
-   
-    // Parse the JSON string
-    final List<dynamic> jsonList = json.decode(jsonString);
-   
-    // Convert JSON data to a list of Car objects
+  @override
+  void initState() {
+    super.initState();
+    loadCars();
+  }
+
+  Future<void> loadCars() async {
+    final String data = await rootBundle.loadString('assets/cars.json');
+    final List<dynamic> jsonList = json.decode(data);
     final List<Car> loadedCars = jsonList.map((json) => Car.fromJson(json)).toList();
-   
-    // Update the state with loaded data
+
     setState(() {
       cars = loadedCars;
     });
-  } catch (error) {
-    // Handle errors, e.g., show an error message or fallback to default data
-    //print('Error loading cars: $error');
   }
-}
 
  @override
 Widget build(BuildContext context) {
