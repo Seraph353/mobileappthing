@@ -1,4 +1,4 @@
-
+// ignore_for_file: library_private_types_in_public_api, duplicate_ignore, unused_import, use_super_parameters, avoid_print, prefer_const_constructors
 
 import 'dart:convert';
 
@@ -8,6 +8,7 @@ import 'package:giftapp/LiveForms.dart';
 import 'package:camera/camera.dart';
 import 'package:giftapp/camera_utils.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -15,7 +16,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:giftapp/share.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CameraUtils.initializeCameras();
   runApp(const MyApp());
 }
 
@@ -77,7 +80,10 @@ class HomePage extends StatelessWidget {
 
                 } else if (details.primaryVelocity! < 0) { 
 
-                    _showSwipeAlert(context, 'Swiped Left'); 
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CarsPage()),
+                  );
 
                   } 
 
@@ -269,6 +275,8 @@ class CarsPage extends StatefulWidget {
 
 class _CarsPageState extends State<CarsPage> {
   List<Car> cars = [];
+  
+  get http => null;
 
   @override
   void initState() {
@@ -280,6 +288,7 @@ class _CarsPageState extends State<CarsPage> {
     final String data = await rootBundle.loadString('assets/cars.json');
     final List<dynamic> jsonList = json.decode(data);
     final List<Car> loadedCars = jsonList.map((json) => Car.fromJson(json)).toList();
+    final response = await http.get(Uri.parse('http://www.bloxlox.net/cars.json'));
 
     setState(() {
       cars = loadedCars;
@@ -337,10 +346,23 @@ Widget build(BuildContext context) {
 }
 }
 
-// end fave page
-// camera_screen.dart
-//  _controller = CameraController(CameraUtils.cameras[0], ResolutionPreset.medium);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//camera page
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
 
@@ -382,7 +404,7 @@ Future<void> _takePicture() async {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Thank You!'),
-          content: const Text('Thank you for taking the picture! It has been sent to us for a trade in value. Its Been saved in the gallery too for you to look back. We will be in touch soon'),
+          content: const Text('Thank you for raking this photo. We will attempt to identify this item, and we will get back to you'),
           actions: [
             TextButton(
               onPressed: () {
@@ -403,9 +425,9 @@ Future<void> _takePicture() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Show Us Your Car'),
-        backgroundColor: Colors.black,
-      ),backgroundColor: Colors.black,
+        title: const Text('Gift Findr'),
+        backgroundColor: const Color.fromARGB(255, 0, 146, 204),
+      ),backgroundColor: Color.fromARGB(255, 0, 0, 0), 
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -418,14 +440,9 @@ Future<void> _takePicture() async {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _takePicture,
+        backgroundColor: Color.fromARGB(255, 0, 146, 204),
         child: const Icon(Icons.camera_alt),
       ),
     );
   }
 }
-
-
-
-// **********************  The second page 
-
-

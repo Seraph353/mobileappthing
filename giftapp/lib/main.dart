@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Gift Finder',
+      title: 'Music Sort',
       home: HomePage(),
     );
   }
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
         return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Gift Finder',
+          'Music SOrt',
           style: TextStyle(
             fontFamily: 'PermanentMarker',
             fontSize: 34.0,
@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Gift Finder',
+                'Music Sort',
                 style: TextStyle(
                   fontSize: 36.0,
                   fontWeight: FontWeight.bold,
@@ -459,7 +459,7 @@ Future<void> _takePicture() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gift Finder'),
+        title: const Text('Music Sort'),
         backgroundColor: const Color.fromARGB(255, 0, 146, 204),
       ),backgroundColor: Color.fromARGB(255, 0, 0, 0), 
       body: FutureBuilder<void>(
