@@ -77,7 +77,9 @@ class HomePage extends StatelessWidget {
 
                   if (details.primaryVelocity! > 0) { 
                   
-                      _showSwipeAlert(context, 'Swiped Right'); 
+                      Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CameraScreen()));
 
                 } else if (details.primaryVelocity! < 0) { 
 
