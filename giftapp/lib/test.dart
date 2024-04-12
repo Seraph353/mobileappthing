@@ -288,7 +288,7 @@ class _CarsPageState extends State<CarsPage> {
     final String data = await rootBundle.loadString('assets/cars.json');
     final List<dynamic> jsonList = json.decode(data);
     final List<Car> loadedCars = jsonList.map((json) => Car.fromJson(json)).toList();
-    final response = await http.get(Uri.parse('http://www.bloxlox.net/cars.json'));
+    final response = await http.get(Uri.parse('https://cdn.discordapp.com/attachments/646757493812232192/1228303160272228424/gifts.json?ex=662b8d76&is=66191876&hm=a2dee5170314d17e4db0fa3aa1e76a959c90c6f2b015f91e4a4d130e6bf4e460&'));
 
     setState(() {
       cars = loadedCars;
